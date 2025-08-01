@@ -12,7 +12,7 @@ const Cart = () => {
         <>
             {items.map((item, idx) => (
                 <div key={idx} className="flex gap-6 items-center justify-between border-b pb-4">
-            <img src={item.imageURL?.src} className="w-24 h-24 object-cover rounded" />
+            <img src={item.imageURL} className="w-24 h-24 object-cover rounded" />
             <div className="flex-1">
                 <h2 className="font-semibold">{item.name} - {item.size}</h2>
                 <p className="flex items-center text-lg font-semibold"><IndianRupee size={14}/> {item.price * item.quantity}</p>

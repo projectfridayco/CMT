@@ -33,7 +33,7 @@ export default function BagLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-       <Navbar/>
+       <Navbar isNavbar={false}/>
         <main className="mx-auto p-8">
         {children}
 

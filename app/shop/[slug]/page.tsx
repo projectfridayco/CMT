@@ -38,6 +38,7 @@ const ProductDetail = () => {
             imageURL: product.images[0],
             quantity: quantity,
             size: selectedSize,
+            isGift: false
         })
 
         setSuggestionModal(true)
