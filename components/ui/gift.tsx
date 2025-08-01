@@ -60,8 +60,8 @@ const Gift = ({product, onClose}:{product: any, onClose:any}) => {
             <div className="flex flex-col gap-6 lg:w-3/4 lg:just">
                 <img src={activeImg?.src} className="aspect-square w-full h-full object-cover rounded-xl mx-auto" />
                 <div className="flex flex-row justify-between h-24">
-                    {product.images.map((img:any) => (
-                        <img src={img?.src}  className="w-24 h-24 rounded-md object-cover cursor-pointer" onClick={() => setActiveImg(img)}/>
+                    {product.images.map((img:any, index: number) => (
+                        <img src={img?.src} key={img?.src || index} className="w-24 h-24 rounded-md object-cover cursor-pointer" onClick={() => setActiveImg(img)}/>
 
                     ))}
 

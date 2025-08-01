@@ -1,5 +1,6 @@
 "use client"
 
+import { UUID } from "crypto"
 import localFont from "next/font/local"
 import { IndianRupee, Minus, Plus, Trash2, XCircle } from "lucide-react"
 import { useCartStore } from "@/store/cart-store"
@@ -95,6 +96,30 @@ useEffect(() => {
         </div>
     }
 
+    const loadRazorpayScript = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement("script")
+            script.src = "https://checkout.razorpay.com/v1/checkout.js"
+            script.onload = () => {
+            resolve(true)
+            }
+            script.onerror = () => {
+            resolve(false)
+            }
+            document.body.appendChild(script)
+        })
+        }
+
+    const handlePayment = async() => {
+        const res = await loadRazorpayScript()
+        if(!res){
+            alert("Failed to load Razorpay")
+            return
+        }
+
+       
+    }
+
     return(
         <>
         {loading && (
@@ -120,7 +145,7 @@ useEffect(() => {
             <div className="col-span-1">
                 {offerPush && (
                     <div className="bg-black border border-black-300 p-4 rounded mb-4 text-center text-white text-sm">
-                        You're just <span className="highlight text-md">₹{2000 - total}</span> away from unlocking an exclusive offer!
+                        You are just <span className="highlight text-md">₹{2000 - total}</span> away from unlocking an exclusive offer!
                     </div>
                     )}
                     {!giftInCart && offer && (

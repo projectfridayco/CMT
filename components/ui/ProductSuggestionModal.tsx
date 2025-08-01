@@ -1,10 +1,11 @@
 'use client'
 
 import { XCircle } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import {  useState } from 'react'
+import Image from 'next/image'
 
 export default function ProductSuggestionModal({ onClose, recommended }: { onClose: () => void, recommended: any[] }) {
-  const [products, setProducts] = useState([])
+  // const [products, setProducts] = useState([])
 
   // useEffect(() => {
   //   const fetchSuggestions = async () => {
@@ -38,7 +39,7 @@ export default function ProductSuggestionModal({ onClose, recommended }: { onClo
           {recommended.map((p: any) => (
             
             <div key={p.id} className="text-center">
-              <img src={p.images[0]?.src} alt={p.name} className="w-full h-64 object-cover mb-2" />
+              <Image src={p.images[0]?.src} alt={p.name} className="w-full h-64 object-cover mb-2" />
               <p className="text-sm">{p.name}</p>
               <p className="text-sm font-semibold">₹{p.price}</p>
             </div>

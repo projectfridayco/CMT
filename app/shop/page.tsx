@@ -84,7 +84,7 @@ useEffect(() => {
         const filterButton = document.querySelector(".filter__btn");
         const closeButton = document.querySelector(".close__btn");
         const applyButton = document.querySelector(".apply__btn");
-        let isOpen = false;
+        // let isOpen = false;
 
         const timeline = gsap.timeline({paused: true});
 

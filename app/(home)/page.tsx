@@ -28,7 +28,7 @@ const Home = () => {
   
     const introParagraphs = document.querySelectorAll(".intro h2")
     introParagraphs.forEach((paragraph) => {
-        const text = paragraph.textContent;
+        const text = paragraph.textContent ?? "";
         paragraph.innerHTML= text
             .split(/(\s+)/)
             .map((part) => {

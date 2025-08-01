@@ -13,13 +13,13 @@ const razorpay = new Razorpay({
 export const POST = async(req: NextRequest) => {
 
     const body = await req.json();
-    const {email,name,phone,password,cartItems,totalAmount} = body
+    const {email,name,phone,password,totalAmount} = body
 
     const customer = await getOrCreateCustomer({name, email, phone, password})
 
     const orderId = crypto.randomUUID()
 
-    const payment_capture = 1
+    // const payment_capture = 1
     const currency = "INR"
 
     const options = {
@@ -44,6 +44,6 @@ export const POST = async(req: NextRequest) => {
         })
     }
     catch(err){
-        return NextResponse.json({error: "Failed to process razorpay order"}, {"status": 500})
+        return NextResponse.json({error: "Failed to process razorpay order", err}, {"status": 500})
     }
 }
