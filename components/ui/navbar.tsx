@@ -9,7 +9,7 @@ type NavbarProps = {
     isNavbar: boolean
 }
 
-const Navbar = ({isNavbar}:{isNavbar: NavbarProps}) => {
+const Navbar = ({isNavbar}: NavbarProps) => {
 
     const [mobileOpen, setMobileOpen] = useState<boolean>(false)
     const {items} = useCartStore();
