@@ -138,7 +138,7 @@ const Home = () => {
             }
         }
     });
-
+ 
     gsap.to(".img-2 img", {
         scale: 1.125,
         ease: "none",
