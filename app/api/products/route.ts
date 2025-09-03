@@ -32,7 +32,7 @@ export async function GET(req: Request) {
     `${process.env.WC_CONSUMER_KEY}:${process.env.WC_CONSUMER_SECRET}`
   ).toString("base64")
 
-  const baseURL = "https://originalsbycmt.com/wp-json/wc/v3"
+  const baseURL = "https://endpoint.originalsbycmt.com/wp-json/wc/v3"
 
   try {
     console.log(`${baseURL}/products?${params.toString()}`)
@@ -60,7 +60,7 @@ export async function GET(req: Request) {
       : Promise.resolve({json: async() => []}),
     
 
-    fetch(`https://originalsbycmt.com/wp-json/wp/v2/product_brand`, {
+    fetch(`https://endpoint.originalsbycmt.com/wp-json/wp/v2/product_brand`, {
         headers: {Authorization: `Basic ${auth}`}
       })
       

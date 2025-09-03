@@ -8,7 +8,7 @@ export async function getOrCreateCustomer({name, email, phone, password}:{
     `${process.env.WC_CONSUMER_KEY}:${process.env.WC_CONSUMER_SECRET}`
   ).toString("base64")
 
-  const baseURL = "https://originalsbycmt.com/wp-json/wc/v3"
+  const baseURL = "https://endpoint.originalsbycmt.com/wp-json/wc/v3"
 
     const res = await fetch(`${baseURL}/customers`, {
       

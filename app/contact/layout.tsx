@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./../globals.css";
 import {Menu, ShoppingBag, User2} from "lucide-react"
 import Navbar from "@/components/ui/navbar";
-import { Toaster } from "react-hot-toast";
+import Link from "next/link";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shop - CMT",
+  title: "Contact - CMT",
   description: "",
 };
 
@@ -36,7 +37,7 @@ export default function ShopLayout({
        <Navbar isNavbar={false}/>
         <main className="mx-auto p-2 lg:p-8">
         {children}
-        <Toaster position="bottom-center" reverseOrder={false}/>
+        
         </main>
       </body>
     </html>

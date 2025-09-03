@@ -1,24 +1,73 @@
 "use client"
 
+import { useCartStore } from "@/store/cart-store";
 import { MoveLeft } from "lucide-react"
 import localFont from "next/font/local";
 import Link from "next/link"
+import { useEffect, useState } from "react";
 
 type CheckoutProps = {
-    setCheckout : (value: boolean) => void;
+    setCheckout : (value: boolean) => void
+    setDelivery: (value:number) => void
+    onShippingChange: (details: any) => void
 }
 
 const neueFont = localFont({
     src: "./../../app/fonts/neue.ttf"
 })
 
-const Checkout = ({setCheckout}: CheckoutProps) => {
+const Checkout = ({setCheckout, setDelivery,onShippingChange}: CheckoutProps) => {
+    const {items} = useCartStore()
+    const total = items.reduce((acc,item) => acc + item.price * item.quantity, 0);
+
+    const [form,setForm] = useState({
+        email: "",
+        full_name: "",
+        phone: "",
+        address_1:"",
+        state: "",
+        city: "",
+        postcode: "",
+        country: "IN"
+    })
+
+    useEffect(() => {
+        const [first_name,...lastParts] = form.full_name.split("")
+        const shipping = {
+            email: form.email,
+            phone: form.phone,
+            address_1: form.address_1,
+            address_2: "",
+            city: form.city,
+            state: form.state,
+            postcode: form.postcode,
+            country: form.country,
+            first_name: first_name,
+            last_name: lastParts.join(" ")
+
+        }
+        onShippingChange(shipping)
+
+    },[form,onShippingChange])
+
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const {name, value} = e.target
+        setForm(prev => ({...prev, [name]: value}))
+
+        if(name === "state"){
+            const selected = value.toLowerCase()
+            if(total >= 2000 ) setDelivery(0)
+            else if(selected === "tamil nadu") setDelivery(49)
+            else setDelivery(99)
+        }
+    }
+
     return(
         <>  
             <h3 className={`font-semibold text-xl tracking-wide ${neueFont.className} highlight`}>Contact Information</h3>
             <p className="text-gray-900 text-sm mb-2">We will use this email to send you details and updates about your order.</p>
             <div className="grid grid-cols-2">
-                <input type="email" name="email" placeholder="Email Address" required className="border rounded p-2 w-full mb-2 text-sm" />
+                <input type="email" name="email" placeholder="Email Address" required className="border rounded p-2 w-full mb-2 text-sm col-span-2 md:col-span-1" value={form.email} onChange={handleChange} />
                 {/* <input type="password" name="password" placeholder="Create Password" required className="border rounded p-2 w-full mb-2 text-sm" /> */}
             </div>
             <Link href="login" className="underline ">Already an user? Login.</Link>
@@ -27,15 +76,15 @@ const Checkout = ({setCheckout}: CheckoutProps) => {
             <h3 className={`font-semibold text-xl mt-8 tracking-wide ${neueFont.className} highlight`}>Billing Address</h3>
             <p className="text-gray-900 text-sm mb-2">Enter the billing address that matches your payment method.</p>
             <div className="grid grid-cols-2 gap-2">
-                <input type="text" name="full_name" placeholder="Full Name" required className="border rounded p-2 w-full mb-2 text-sm" />
-                <input type="text" name="phone" placeholder="Phone" required className="border rounded p-2 w-full mb-2 text-sm" />
+                <input type="text" name="full_name" placeholder="Full Name" required className="border rounded p-2 w-full mb-2 text-sm" value={form.full_name} onChange={handleChange} />
+                <input type="text" name="phone" placeholder="Phone" required className="border rounded p-2 w-full mb-2 text-sm" value={form.phone} onChange={handleChange} />
 
             </div>
-            <input type="text" name="address_1" placeholder="Address" required className="border rounded p-2 w-full mb-2 text-sm" />
+            <input type="text" name="address_1" placeholder="Address" required className="border rounded p-2 w-full mb-2 text-sm" value={form.address_1} onChange={handleChange} />
 
             <div className="grid grid-cols-2 gap-2">
                 {/* <input type="text" name="province" placeholder="State/Province" required className="border rounded p-2 w-full mb-2 text-sm" /> */}
-                <select name="province" required className="border rounded p-2 w-full mb-2 text-sm">
+                <select name="state" value={form.state} onChange={handleChange} required className="border rounded p-2 w-full mb-2 text-sm">
                     <option value="">Select State / Union Territory</option>
                     <option value="Andhra Pradesh">Andhra Pradesh</option>
                     <option value="Arunachal Pradesh">Arunachal Pradesh</option>
@@ -74,7 +123,7 @@ const Checkout = ({setCheckout}: CheckoutProps) => {
                     <option value="Lakshadweep">Lakshadweep</option>
                     <option value="Puducherry">Puducherry</option>
                 </select>
-                <input type="text" name="city" placeholder="City" required className="border rounded p-2 w-full mb-2 text-sm" />
+                <input type="text" name="city" placeholder="City" required value={form.city} onChange={handleChange} className="border rounded p-2 w-full mb-2 text-sm" />
                 
             </div>
 

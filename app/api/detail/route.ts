@@ -8,7 +8,7 @@ export const GET = async(req: NextRequest) => {
     return NextResponse.json({error: "Missing slug"}, {status: 400})
   }
 
-  const baseURL = 'https://originalsbycmt.com/wp-json/wc/v3'
+  const baseURL = 'https://endpoint.originalsbycmt.com/wp-json/wc/v3'
 
   let recommendedData = []
   

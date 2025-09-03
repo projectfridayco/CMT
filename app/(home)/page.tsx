@@ -5,6 +5,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import gsap from "gsap"
 import localFont from "next/font/local"
 import Lenis from "lenis"
+import { useEffect, useState } from "react"
+import Loading from "@/components/ui/Loading"
+import Link from "next/link"
+import { ShoppingBag } from "lucide-react"
 
 const neueFont = localFont({
         src: "./../fonts/neue.ttf",
@@ -12,6 +16,29 @@ const neueFont = localFont({
 
 const Home = () => {
 
+    const [loading,setLoading] = useState(true)
+    const [canHideLoading, setCanHideLoading] = useState(false);
+    const [products,setProducts] = useState([])
+    const [categories,setCategories] = useState([])
+
+    useEffect(() => {
+        setLoading(true)
+
+        fetch('/api/home')
+            .then((res) => res.json())
+            .then((data) => {
+            setProducts(data.products)
+
+            setCategories(data.filters.categories)
+
+            })
+            .catch(() => setLoading(false))
+            .finally(() => {
+                setCanHideLoading(true);
+                // setLoading(false)
+            })
+    },[])
+    
     useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger);
     const stickySection = document.querySelector(".sticky");
@@ -44,6 +71,8 @@ const Home = () => {
             })
             .join("");
     });
+
+    
 
     function flickerAnimation(targets, toOpacity){
         gsap.to(targets, {
@@ -141,6 +170,13 @@ const Home = () => {
 
     return(
         <>
+        {loading && (
+                          <Loading trigger={canHideLoading}
+                        onExit={() => {
+                          setLoading(false); 
+                        }}
+                      />
+                      )}
           <section className="section hero__section" id="home">
             <div className="container hero__container">
                 <h1 className={`hero__title ${neueFont.className}`}>ORIGINALS</h1>
@@ -148,7 +184,7 @@ const Home = () => {
                  
                 </div>
                 <div className="hero__img-fg">
-                    <img src="https://originalsbycmt.com/wp-content/uploads/2025/07/hero-cmt.png"/>
+                    <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/07/hero-cmt.png"/>
                 </div>
            
             </div>
@@ -175,22 +211,33 @@ const Home = () => {
       
         <section className="section context_section">
             <div className="img-context swiper">
-                <div className="swiper-wrapper">
+                <div className="swiper-wrapper mb-4">
                     <div className="slide-1 swiper-slide">
-                        <div className="product__item">
+                        {products.map((product:any) => (
+                            <Link className="product__item relative rounded-xl overflow-hidden" key={product.id} href={`shop/${product.slug}`}>
+                            {/* Background Image */}
+                            <img 
+                                src={product.images[0].src} 
+                                alt="Parasite Tshirt" 
+                                className="w-full h-64 object-cover"
+                            />
+
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+
+                            {/* Text Content */}
+                            <div className="absolute bottom-0 left-0 w-full p-4 text-white">
+                                <h3 className={`${neueFont.className} text-sm tracking-wide font-semibold`}>{product.name}</h3>
+                            </div>
+                        </Link>
+                        ))}
+
+                        <Link className="flex flex-row justify-between rounded-xl" href="/shop">Shop All<ShoppingBag/></Link>
+                        
+                        {/* <div className="product__item">
                             <div className="product__item-img">
                                 <div className="product__circle"></div>
-                                <img src="https://originalsbycmt.com/wp-content/uploads/2025/04/pro1.png" alt="" className="product-img"/>
-                            </div>
-                            <div className="product__item-data">
-                                <h3>Product One</h3>
-                            
-                            </div>
-                        </div>
-                        <div className="product__item">
-                            <div className="product__item-img">
-                                <div className="product__circle"></div>
-                                <img src="https://originalsbycmt.com/wp-content/uploads/2025/04/pro2.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/03/LMTS004522_1.jpg" alt="" className="product-img"/>
                             </div>
                             <div className="product__item-data">
                                 <h3>Product two</h3>
@@ -200,7 +247,7 @@ const Home = () => {
                         <div className="product__item">
                             <div className="product__item-img">
                                 <div className="product__circle"></div>
-                                <img src="https://originalsbycmt.com/wp-content/uploads/2025/04/pro3.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro3.png" alt="" className="product-img"/>
                             </div>
                             <div className="product__item-data">
                                 <h3>Product three</h3>
@@ -210,18 +257,20 @@ const Home = () => {
                         <div className="product__item">
                             <div className="product__item-img">
                                 <div className="product__circle"></div>
-                                <img src="https://originalsbycmt.com/wp-content/uploads/2025/04/pro4.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro4.png" alt="" className="product-img"/>
                             </div>
                             <div className="product__item-data">
                                 <h3>Product four</h3>
                             
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
             <div className="context-copy">
                 <h1 className={`${neueFont.className}`}>The New <span className="spcl-text">Age</span> Realm</h1>
+                <p className="text-white p-4 mt-4 mb-4">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veniam qui fugiat vitae voluptatem nobis nostrum aut quod aliquam nihil neque</p>
+
             </div>
         </section>
         <section className="sticky">
@@ -236,7 +285,7 @@ const Home = () => {
                  
             </div>
             <div className="img-2">
-                <img src="https://originalsbycmt.com/wp-content/uploads/2025/07/c-3.jpg"/>
+                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/07/c-3.jpg"/>
                 
 
 
@@ -248,12 +297,13 @@ const Home = () => {
 
         </section>
         <section className="section category__section">
-            <div className="container category__container">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur iste beatae consequatur</p>
+            <div className="container category__container ">
+                <h1 className={`${neueFont.className} tracking-wide pl-4 text-4xl mt-16`}>Categories</h1>
+                <p className="pl-4 mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur iste beatae consequatur</p>
                 <div className="slide-1 swiper-slide category__wrapper">
                         <div className="product__item">
                             <div className="product__item-img">
-                                <img src="https://originalsbycmt.com/wp-content/uploads/2025/04/pro1.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro1.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
                                 <h3>TShirts</h3>
@@ -263,7 +313,7 @@ const Home = () => {
                         <div className="product__item">
                             <div className="product__item-img">
                       
-                                <img src="https://originalsbycmt.com/wp-content/uploads/2025/04/pro2.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro2.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
                                 <h3>Jeans</h3>
@@ -273,7 +323,7 @@ const Home = () => {
                         <div className="product__item">
                             <div className="product__item-img">
                                 <div className="product__circle"></div>
-                                <img src="https://originalsbycmt.com/wp-content/uploads/2025/04/pro3.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro3.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
                                 <h3>Shirts</h3>
@@ -283,7 +333,7 @@ const Home = () => {
                         <div className="product__item">
                             <div className="product__item-img">
                    
-                                <img src="https://originalsbycmt.com/wp-content/uploads/2025/04/pro4.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro4.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
                                 <h3>Hoodies</h3>
@@ -294,10 +344,10 @@ const Home = () => {
             </div>
         </section>
         <section className="section contact__section">
-            <div>
+            <div className="mt-16">
                 <h1 className={`${neueFont.className}`}>Infinite Realms <br/>
             Beckon <span className="spcl-text">Beyond</span></h1>
-            <form action="" className="contact__form">
+            <form action="" className="contact__form mb-16">
                 <div className="contact__content">
                     <input type="email" className="contact__item" placeholder=" "/>
                     <label htmlFor="" className="contact__label">Email</label>
@@ -310,12 +360,12 @@ const Home = () => {
             
 
             <div className="contact__img">
-                <img src="https://originalsbycmt.com/wp-content/uploads/2025/07/filler.jpg" />
+                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/07/filler.jpg" />
             </div>
         </section>
         <section className="footer">
             <div className="footer__brand">
-                <img src="https://originalsbycmt.com/wp-content/uploads/2025/05/CMT-LOGO-01-copy-white.png"/>
+                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/05/CMT-LOGO-01-copy-white.png"/>
 
             </div>  
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum repellat dignissimos voluptatum omnis corrupti animi neque culpa qui, veniam, sunt magnam tempore facere suscipit eveniet excepturi earum perspiciatis a perferendis sint consequatur vitae. Sequi autem sit repellendus dignissimos itaque velit error, qui facilis labore, voluptates repudiandae accusantium consequuntur odio voluptatibus.</p>

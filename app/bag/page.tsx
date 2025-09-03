@@ -9,6 +9,8 @@ import { useEffect, useState } from "react"
 import Checkout from "@/components/ui/checkout"
 import Gift from "@/components/ui/gift"
 import Loading from "@/components/ui/Loading"
+import Link from "next/link"
+import Image from "next/image"
 
 
 const neueFont = localFont({
@@ -27,6 +29,8 @@ const Bag = () => {
     const [giftProduct,setGiftProduct] = useState<any>([]) 
     const [loading,setLoading] = useState(false)
     const [canHideLoading, setCanHideLoading] = useState(false);
+    const [delivery,setDelivery] = useState<number>(49)
+    const [shippingDetails,setShippingDetails] = useState<any>(null)
 
     
 
@@ -43,6 +47,13 @@ const Bag = () => {
 //     setOfferPush(false)
 //   }
 // }, [total])
+useEffect(() => {
+  if (gift) {
+    document.body.style.overflow = "hidden"
+  } else {
+    document.body.style.overflow = "auto"
+  }
+}, [gift])
 
 useEffect(() => {
   const giftInCart = items.find(item => item.isGift);
@@ -50,12 +61,14 @@ useEffect(() => {
   if (total >= 2000 && !giftInCart) {
     setOffer(true);        // Show modal
     setOfferPush(false);   // No small notification
+    setDelivery(0)
   } else if (total >= 1500 && !giftInCart) {
     setOfferPush(true);    // Show small notification
     setOffer(false);       // No modal
   } else {
     setOffer(false);
     setOfferPush(false);
+    setDelivery(99)
   }
 
 
@@ -63,6 +76,8 @@ useEffect(() => {
     removeItem(giftInCart.id,giftInCart.size); 
   }
 }, [total, items]);
+
+
 
     const giftInCart = items.find(item => item.isGift);
     const handleClaimGift = async () => {
@@ -89,10 +104,12 @@ useEffect(() => {
     }
 
     if(total === 0 || items.length === 0){
-        return <div>
-            <h1>
-                Your cart is Empty
+        return <div className="flex flex-col">
+            <Image src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/08/undraw_access-denied_krem.svg" alt="No Items on cart" width={250} height={0} className="self-center mb-4" />
+            <h1 className="text-lg font-black uppercase text-center tracking-wide mb-4">
+                You have no items available in the cart
             </h1>
+            <Link href="/shop" className="uppercase font-bold border p-2 align-center text-center">Continue Shopping</Link>
         </div>
     }
 
@@ -117,7 +134,56 @@ useEffect(() => {
             return
         }
 
-       
+        const paymentData = {
+            amount: (total + delivery) * 100,
+            currency: "INR",
+            receipt: `receipt_order_${Date.now()}`
+        }
+
+        const razorpayOrder = await fetch("api/razorpay",{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(paymentData)
+        }).then((res) => res.json())
+
+        const options = {
+            key: process.env.NEXT_PUBLIC_RZP_KEY,
+            amount: razorpayOrder.amount,
+            currency: "INR",
+            name: "CMT Clothing",
+            description: "Your ultimate surplus store",
+            order_id: razorpayOrder.id,
+            handler: async function(response: any){
+                const orderRes = await fetch("api/order", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        cartItems: items,
+                        razorpayPaymentId: response.razorpay_payment_id,
+                        shippingDetails
+                    })
+                })
+
+                if(orderRes.ok){
+                    clearCart()
+                    alert("Order placed successfully")
+                    window.location.href = "/thankyou"
+                }
+                else{
+                    alert("Payment accepted but order creation failed. Contact Support")
+                }
+            },
+            prefill: {
+                name: shippingDetails.first_name,
+                email: shippingDetails.email,
+                phone: shippingDetails.phone
+            },
+            theme: {
+                color: "#000000"
+            },
+        }
+       const paymentObject = new (window as any).Razorpay(options)
+       paymentObject.open()
     }
 
     return(
@@ -129,20 +195,21 @@ useEffect(() => {
                         }}
                       />
                       )}
-        <h1 className={`text-8xl font-bold mb-8 tracking-wide ${neueFont.className}`}>{checkout ? "Checkout" : "Your Bag"}</h1>
+        <h1 className={`text-4xl sm:text-6xl md:text-8xl lg:text-10xl font-bold mb-8 tracking-wide ${neueFont.className}`}>{checkout ? "Checkout" : "Your Bag"}</h1>
 
         <div className="grid lg:grid-cols-4 gap-16 ">
             <div className="col-span-3">
                 {checkout ? (
-                <Checkout setCheckout={setCheckout} />
+                <Checkout setCheckout={setCheckout} setDelivery={setDelivery} onShippingChange={setShippingDetails}/>
 
                 ) : (
+                    
                 <Cart/>
-
+                    
                 )}
 
             </div>
-            <div className="col-span-1">
+            <div className="col-span-3 lg:col-span-1">
                 {offerPush && (
                     <div className="bg-black border border-black-300 p-4 rounded mb-4 text-center text-white text-sm">
                         You are just <span className="highlight text-md">₹{2000 - total}</span> away from unlocking an exclusive offer!
@@ -167,8 +234,9 @@ useEffect(() => {
             }
                 
                 <h3 className="font-semibold text-lg flex flex-row justify-between mb-2">Subtotal: <span className="flex flex-row items-center"><IndianRupee size={15}/> {total}</span></h3>
-                <h3 className="font-semibold text-lg flex flex-row justify-between mb-4 border-b-1 border-black">Discount: <span className="flex flex-row items-center"><IndianRupee size={15}/> {total}</span></h3>
-                <h1 className="font-semibold text-xl flex flex-row justify-between mb-4">Total: <span className="flex flex-row items-center"><IndianRupee size={15}/> {total}</span></h1>
+                {checkout && (<h3 className="font-semibold text-lg flex flex-row justify-between mb-2 ">Delivery: <span className="flex flex-row items-center"><IndianRupee size={15}/> {delivery}</span></h3>)}
+                <h3 className="font-semibold text-lg flex flex-row justify-between mb-4 border-b-1 border-black">Discount: <span className="flex flex-row items-center"><IndianRupee size={15}/> 0</span></h3>
+                <h1 className="font-semibold text-xl flex flex-row justify-between mb-4">Total: <span className="flex flex-row items-center"><IndianRupee size={15}/> {total + delivery}</span></h1>
 
                     
                 {!checkout ? (
@@ -176,7 +244,10 @@ useEffect(() => {
 
                 ) : (
                     <form>
-                        <button className="bg-primary cursor-pointer rounded-md py-3 px-6 w-full" >Proceed to Pay</button>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            handlePayment()
+                        }} className="bg-primary cursor-pointer rounded-md py-3 px-6 w-full" >Proceed to Pay</button>
 
                     </form>
                 )}
@@ -187,7 +258,7 @@ useEffect(() => {
         </div>
        
         {gift && giftProduct &&(
-            <div className="fixed w-full h-full inset-0 bg-primary pt-32">
+            <div className="fixed w-full h-full inset-0 bg-primary lg:pt-32 overflow-y-auto">
             <Gift product={giftProduct} onClose={() => setGift(false)}/>
 
             </div>  

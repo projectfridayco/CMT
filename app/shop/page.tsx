@@ -5,7 +5,7 @@ import {useGSAP} from '@gsap/react'
 import { ScrollTrigger } from 'gsap/all'
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import {Filter, XCircle} from "lucide-react"
+import {Filter, IndianRupee, XCircle} from "lucide-react"
 import Link from 'next/link';
 import localFont from 'next/font/local';
 import SkeletonCard from '@/components/ui/Loading';
@@ -156,30 +156,30 @@ useEffect(() => {
         )}
         <div className='shop-wrapper' ref={container}>
         <div className='page__header'>
-            <div className="flex flex-col lg:flex-row lg:justify-between items-center title__header">
-                <h1 className={`ml-4 tracking-wide ${neueFont.className}`}>Products</h1>
+            <div className="flex  title__header">
+                <h1 className={`ml-4 text-4xl sm:text-6xl md:text-8xl lg:text-10xl tracking-wide ${neueFont.className} text-left`}>Products</h1>
                 {/* <p className='lg:text-right'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p> */}
             </div>
             
-            <div className="flex gap-8 pl-8 filter_gen">
+            {/* <div className="flex gap-8 pl-8 filter_gen">
                 <a href="#" className='font-semibold current'>All</a>
                 <a href="#" className='font-semibold'>Men</a>
                 <a href="#" className='font-semibold'>Women</a>
                 <a href="#" className='font-semibold'>Kids</a>
 
-            </div>
+            </div> */}
             
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
             {filteredProducts.map((product: any) => (
-                <Link href={`shop/${product.slug}`} key={product.id} className="p-4 rounded-xl shadow shop__card">
+                <Link href={`shop/${product.slug}`} key={product.id} className="p-3 sm:p-4 rounded-xl shadow shop__card">
                 <img
                     src={product.images[0]?.src}
                     alt={product.name}
-                    className="lg:h-120 lg:w-120 sm:w-full object-cover rounded-2xl"
+                    className="lg:h-120 lg:w-120 md:h-80 md:w-140 sm:w-full object-cover rounded-2xl"
                 />
-                <h2 className="mt-4 pl-4 font-light text-lg">{product.name}</h2> 
-                <p className='font-bold pl-4'>Rs. {product.price}</p>
+                <h2 className={`${neueFont.className} tracking-wide mt-4 pl-2 sm:pl-4 text-md md:text-lg font-bold`}>{product.name}</h2> 
+                <p className='font-bold pl-2 md:pl-4 flex flex-row mt-2'><IndianRupee size={15}/> {product.price}</p>
                 {/* <p dangerouslySetInnerHTML={{ __html: product.price_html }} /> */}
                 </Link>
             ))}

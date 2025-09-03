@@ -13,7 +13,7 @@ export default function ProductSuggestionModal({ onClose, recommended }: { onClo
   //       `${process.env.WC_CONSUMER_KEY}:${process.env.WC_CONSUMER_SECRET}`
   //     ).toString('base64')
 
-  //     const res = await fetch(`https://originalsbycmt.com/wp-json/wc/v3/products?category=${categoryID}&per_page=4`, {
+  //     const res = await fetch(`https://endpoint.originalsbycmt.com/wp-json/wc/v3/products?category=${categoryID}&per_page=4`, {
   //       headers: {
   //         Authorization: `Basic ${auth}`
   //       }

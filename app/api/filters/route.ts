@@ -20,7 +20,7 @@ export const GET = async(req: NextRequest) => {
     `${process.env.WC_CONSUMER_KEY}:${process.env.WC_CONSUMER_SECRET}`
   ).toString("base64")
 
-  const baseURL = "https://originalsbycmt.com/wp-json/wc/v3"
+  const baseURL = "https://endpoint.originalsbycmt.com/wp-json/wc/v3"
 
   try{
 
