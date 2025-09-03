@@ -72,7 +72,7 @@ const Home = () => {
             .join("");
     });
 
-    
+     
 
     function flickerAnimation(targets, toOpacity){
         gsap.to(targets, {
