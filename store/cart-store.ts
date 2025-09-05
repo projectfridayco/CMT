@@ -5,7 +5,7 @@ export interface CartItem{
     id: string;
     name: string;
     price: number;
-    imageURL: string | null;
+    imageURL: string | { src: string };
     quantity: number;
     size: string;
     isGift: boolean;
