@@ -19,7 +19,7 @@ const Cart = () => {
     {/* Row 1 - Image + Title + Price */}
     <div className="flex items-center gap-4 flex-1">
       <img
-        src={item.imageURL}
+        src={typeof item.imageURL === "string" ? item.imageURL : item.imageURL?.src}
         alt={item.name}
         className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded"
       />

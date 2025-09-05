@@ -9,6 +9,8 @@ import { useEffect, useState } from "react"
 import Loading from "@/components/ui/Loading"
 import Link from "next/link"
 import { ShoppingBag } from "lucide-react"
+import { useFilterStore } from "@/store/filter-store"
+import { useRouter } from "next/navigation"
 
 const neueFont = localFont({
         src: "./../fonts/neue.ttf",
@@ -20,6 +22,8 @@ const Home = () => {
     const [canHideLoading, setCanHideLoading] = useState(false);
     const [products,setProducts] = useState([])
     const [categories,setCategories] = useState([])
+    const setCategory = useFilterStore((state) => state.setCategory)
+    const router = useRouter()
 
     useEffect(() => {
         setLoading(true)
@@ -166,7 +170,10 @@ const Home = () => {
     });
     })
 
-    
+    const moveToCategory = (id) => {
+        setCategory(id)
+        router.push("/shop")
+    }
 
     return(
         <>
@@ -269,7 +276,7 @@ const Home = () => {
             </div>
             <div className="context-copy">
                 <h1 className={`${neueFont.className}`}>The New <span className="spcl-text">Age</span> Realm</h1>
-                <p className="text-white p-4 mt-4 mb-4">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veniam qui fugiat vitae voluptatem nobis nostrum aut quod aliquam nihil neque</p>
+                <p className="text-white p-4 mt-4 mb-4">Handpicked featured products showcasing the best styles and unbeatable value—trendy surplus clothing designed for comfort, quality, and everyday fashion.</p>
 
             </div>
         </section>
@@ -292,16 +299,16 @@ const Home = () => {
             </div>
  
             <div className="copy">
-                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum quas voluptates repellendus illum aut qui aspernatur nemo voluptate commodi mollitia.</h1>
+                <h1>Handpicked featured products showcasing the best styles and unbeatable value—trendy surplus clothing designed for comfort, quality, and everyday fashion.</h1>
             </div>
 
         </section>
         <section className="section category__section">
             <div className="container category__container ">
                 <h1 className={`${neueFont.className} tracking-wide pl-4 text-4xl mt-16`}>Categories</h1>
-                <p className="pl-4 mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur iste beatae consequatur</p>
+                <p className="px-4 mt-2">Upgrade your wardrobe with quality surplus apparel—smart, stylish, and affordable.</p>
                 <div className="slide-1 swiper-slide category__wrapper">
-                        <div className="product__item">
+                        <div className="product__item" onClick={() => moveToCategory(17)}>
                             <div className="product__item-img">
                                 <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro1.png" alt="" className="product-img"/>
                             </div>
@@ -310,7 +317,7 @@ const Home = () => {
                             
                             </div>
                         </div>
-                        <div className="product__item">
+                        <div className="product__item" onClick={() => moveToCategory(19)}>
                             <div className="product__item-img">
                       
                                 <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro2.png" alt="" className="product-img"/>
@@ -320,7 +327,7 @@ const Home = () => {
                             
                             </div>
                         </div>
-                        <div className="product__item">
+                        <div className="product__item" onClick={() => moveToCategory(43)}>
                             <div className="product__item-img">
                                 <div className="product__circle"></div>
                                 <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro3.png" alt="" className="product-img"/>
@@ -330,13 +337,13 @@ const Home = () => {
                             
                             </div>
                         </div>
-                        <div className="product__item">
+                        <div className="product__item" onClick={() => moveToCategory(42)}>
                             <div className="product__item-img">
                    
                                 <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro4.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
-                                <h3>Hoodies</h3>
+                                <h3>Inners</h3>
                             
                             </div>
                         </div>
@@ -368,7 +375,7 @@ const Home = () => {
                 <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/05/CMT-LOGO-01-copy-white.png"/>
 
             </div>  
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum repellat dignissimos voluptatum omnis corrupti animi neque culpa qui, veniam, sunt magnam tempore facere suscipit eveniet excepturi earum perspiciatis a perferendis sint consequatur vitae. Sequi autem sit repellendus dignissimos itaque velit error, qui facilis labore, voluptates repudiandae accusantium consequuntur odio voluptatibus.</p>
+            <p>CMT Clothing is a surplus fashion retailer committed to delivering high-quality apparel at affordable prices. We source export surplus and overstock clothing from trusted manufacturers, ensuring fresh styles and excellent value for our customers.</p>
         </section>
         </>
     )

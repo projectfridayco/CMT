@@ -942,7 +942,7 @@ section{
 }
 
 .footer p{
-    font-size: 14px;
+    font-size: 11px;
     max-width: 400px;
     color: var(--secondary-color);
 }
