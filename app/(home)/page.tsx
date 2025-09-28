@@ -53,122 +53,123 @@ const Home = () => {
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add((time) => {
         lenis.raf(time * 1000);
-    });
+    })
+});
 
-    gsap.ticker.lagSmoothing(0);
+    // gsap.ticker.lagSmoothing(0);
   
-    const introParagraphs = document.querySelectorAll(".intro h2")
-    introParagraphs.forEach((paragraph) => {
-        const text = paragraph.textContent ?? "";
-        paragraph.innerHTML= text
-            .split(/(\s+)/)
-            .map((part) => {
-                if(part.trim() === ""){
-                    return part;
-                }
-                else{
-                    return part
-                    .split("")
-                    .map((char) => `<span style="opacity:0; display: inline-block;">${char}</span>`)
-                    .join("");
-                }
-            })
-            .join("");
-    });
+    // const introParagraphs = document.querySelectorAll(".intro h2")
+    // introParagraphs.forEach((paragraph) => {
+    //     const text = paragraph.textContent ?? "";
+    //     paragraph.innerHTML= text
+    //         .split(/(\s+)/)
+    //         .map((part) => {
+    //             if(part.trim() === ""){
+    //                 return part;
+    //             }
+    //             else{
+    //                 return part
+    //                 .split("")
+    //                 .map((char) => `<span style="opacity:0; display: inline-block;">${char}</span>`)
+    //                 .join("");
+    //             }
+    //         })
+    //         .join("");
+    // });
 
      
 
-    function flickerAnimation(targets, toOpacity){
-        gsap.to(targets, {
-            opacity: toOpacity,
-            duration: 0.1,
-            stagger: {
-                amount: 0.3,
-                from: "random"
-            }
-        })
-    }
+    // function flickerAnimation(targets, toOpacity){
+    //     gsap.to(targets, {
+    //         opacity: toOpacity,
+    //         duration: 0.1,
+    //         stagger: {
+    //             amount: 0.3,
+    //             from: "random"
+    //         }
+    //     })
+    // }
 
 
 
-    ScrollTrigger.create({
-        trigger: stickySection,
-        start: "top top",
-        end: () => `${window.innerHeight * 3}`,
-        onEnter: () => flickerAnimation(".intro h2 span",1),
-        onLeave: () => flickerAnimation(".intro h2 span", 0),
-        onEnterBack: () => flickerAnimation(".intro h2 span",1),
-        onLeaveBack: () => flickerAnimation(".intro h2 span", 0),
-    });
+    // ScrollTrigger.create({
+    //     trigger: stickySection,
+    //     start: "top top",
+    //     end: () => `${window.innerHeight * 3}`,
+    //     onEnter: () => flickerAnimation(".intro h2 span",1),
+    //     onLeave: () => flickerAnimation(".intro h2 span", 0),
+    //     onEnterBack: () => flickerAnimation(".intro h2 span",1),
+    //     onLeaveBack: () => flickerAnimation(".intro h2 span", 0),
+    // });
 
 
-    ScrollTrigger.create({
-        trigger: stickySection,
-        start: "top top",
-        end: () => `+=${totalStickyheight}`,
-        pin: true,
-        pinSpacing: true
-    });
+    // ScrollTrigger.create({
+    //     trigger: stickySection,
+    //     start: "top top",
+    //     end: () => `+=${totalStickyheight}`,
+    //     pin: true,
+    //     pinSpacing: true
+    // });
 
-    gsap.to("img-1 img", {
-        scale: 1.125,
-        ease: "none",
-        scrollTrigger: {
-            trigger: stickySection,
-            start: "top top",
-            end: () => `+=${window.innerHeight}`,
-            scrub: true
-        }
-    });
+    // gsap.to("img-1 img", {
+    //     scale: 1.125,
+    //     ease: "none",
+    //     scrollTrigger: {
+    //         trigger: stickySection,
+    //         start: "top top",
+    //         end: () => `+=${window.innerHeight}`,
+    //         scrub: true
+    //     }
+    // });
 
-    gsap.to(".img-2", {
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-        ease: "none",
-        scrollTrigger: {
-            trigger: stickySection,
-            start: "top top",
-            end: () => `+=${window.innerHeight}`,
-            scrub: true,
-            onUpdate: (self) => {
-                const progress = self.progress;
-                gsap.set(".img-2", {
-                    clipPath: `polygon(
-                    ${gsap.utils.interpolate(40,0,progress)}% ${gsap.utils.interpolate(25,0,progress)}%
-                    ${gsap.utils.interpolate(60,100,progress)}% ${gsap.utils.interpolate(25,0,progress)}%
-                    ${gsap.utils.interpolate(60,100,progress)}% ${gsap.utils.interpolate(75,100,progress)}%
-                    ${gsap.utils.interpolate(40,0,progress)}% ${gsap.utils.interpolate(75,100,progress)}%
-                    )`
-                })
-            }
-        }
-    });
+    // gsap.to(".img-2", {
+    //     clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+    //     ease: "none",
+    //     scrollTrigger: {
+    //         trigger: stickySection,
+    //         start: "top top",
+    //         end: () => `+=${window.innerHeight}`,
+    //         scrub: true,
+    //         onUpdate: (self) => {
+    //             const progress = self.progress;
+    //             gsap.set(".img-2", {
+    //                 clipPath: `polygon(
+    //                 ${gsap.utils.interpolate(40,0,progress)}% ${gsap.utils.interpolate(25,0,progress)}%
+    //                 ${gsap.utils.interpolate(60,100,progress)}% ${gsap.utils.interpolate(25,0,progress)}%
+    //                 ${gsap.utils.interpolate(60,100,progress)}% ${gsap.utils.interpolate(75,100,progress)}%
+    //                 ${gsap.utils.interpolate(40,0,progress)}% ${gsap.utils.interpolate(75,100,progress)}%
+    //                 )`
+    //             })
+    //         }
+    //     }
+    // });
  
-    gsap.to(".img-2 img", {
-        scale: 1.125,
-        ease: "none",
-        transformOrigin: "center center",
-        scrollTrigger: {
-            trigger: stickySection,
-            start: "top top",
-            end: () => `+=${window.innerHeight}`,
-            scrub: true,
-        }
-    })
+    // gsap.to(".img-2 img", {
+    //     scale: 1.125,
+    //     ease: "none",
+    //     transformOrigin: "center center",
+    //     scrollTrigger: {
+    //         trigger: stickySection,
+    //         start: "top top",
+    //         end: () => `+=${window.innerHeight}`,
+    //         scrub: true,
+    //     }
+    // })
 
 
-    gsap.fromTo(".img-2 img", {
-        scale: 1.125
-    }, {
-        scale: 1.25,
-        ease: "none",
-        scrollTrigger: {
-            trigger: stickySection,
-            start : () => `${window.innerHeight * 3}`,
-            end: () => `${window.innerHeight}`,
-            scrub: true
-        }
-    });
-    })
+    // gsap.fromTo(".img-2 img", {
+    //     scale: 1.125
+    // }, {
+    //     scale: 1.25,
+    //     ease: "none",
+    //     scrollTrigger: {
+    //         trigger: stickySection,
+    //         start : () => `${window.innerHeight * 3}`,
+    //         end: () => `${window.innerHeight}`,
+    //         scrub: true
+    //     }
+    // });
+    // })
 
     const moveToCategory = (id) => {
         setCategory(id)
@@ -217,6 +218,11 @@ const Home = () => {
             </div>
       
         <section className="section context_section">
+            <div className="context-copy">
+                <h1 className={`${neueFont.className} text-6xl`}>The New <span className="spcl-text">Age</span> Realm</h1>
+                {/* <p className="text-white p-4 mt-4 mb-4">Handpicked featured products showcasing the best styles and unbeatable value—trendy surplus clothing designed for comfort, quality, and everyday fashion.</p> */}
+
+            </div>
             <div className="img-context swiper">
                 <div className="swiper-wrapper mb-4">
                     <div className="slide-1 swiper-slide">
@@ -225,8 +231,8 @@ const Home = () => {
                             {/* Background Image */}
                             <img 
                                 src={product.images[0].src} 
-                                alt="Parasite Tshirt" 
-                                className="w-full h-64 object-cover"
+                                alt="" 
+                                className="w-full h-50 md:h-100 object-cover"
                             />
 
                             {/* Gradient Overlay */}
@@ -239,7 +245,6 @@ const Home = () => {
                         </Link>
                         ))}
 
-                        <Link className="flex flex-row justify-between rounded-xl" href="/shop">Shop All<ShoppingBag/></Link>
                         
                         {/* <div className="product__item">
                             <div className="product__item-img">
@@ -272,15 +277,13 @@ const Home = () => {
                             </div>
                         </div> */}
                     </div>
+                        <Link className="inline-flex flex-row justify-between rounded-4xl bg-primary px-8 py-4 md:px-12 md:py-6 ml-4 tracking-wide mt-8 gap-16 w-auto" href="/shop">Shop All<ShoppingBag/></Link>
+
                 </div>
             </div>
-            <div className="context-copy">
-                <h1 className={`${neueFont.className}`}>The New <span className="spcl-text">Age</span> Realm</h1>
-                <p className="text-white p-4 mt-4 mb-4">Handpicked featured products showcasing the best styles and unbeatable value—trendy surplus clothing designed for comfort, quality, and everyday fashion.</p>
-
-            </div>
+            
         </section>
-        <section className="sticky">
+        {/* <section className="sticky">
             <div className="intro">
                 <h2 className={`${neueFont.className}`}>
                     Categories
@@ -302,54 +305,60 @@ const Home = () => {
                 <h1>Handpicked featured products showcasing the best styles and unbeatable value—trendy surplus clothing designed for comfort, quality, and everyday fashion.</h1>
             </div>
 
-        </section>
-        <section className="section category__section">
-            <div className="container category__container ">
-                <h1 className={`${neueFont.className} tracking-wide pl-4 text-4xl mt-16`}>Categories</h1>
+        </section> */}
+        <section className="section mt-16">
+            <div className=" category__container ">
+                <h2 className={`${neueFont.className} text-6xl pl-4`}>
+                    Categories
+                </h2>
                 <p className="px-4 mt-2">Upgrade your wardrobe with quality surplus apparel—smart, stylish, and affordable.</p>
-                <div className="slide-1 swiper-slide category__wrapper">
+                
+                {/* <h1 className={`${neueFont.className} tracking-wide pl-4 text-4xl mt-16`}>Categories</h1>
+                 */}
+                <div className=" swiper-slide category__wrapper">
                         <div className="product__item" onClick={() => moveToCategory(17)}>
                             <div className="product__item-img">
-                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro1.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/09/category-1.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
-                                <h3>TShirts</h3>
+                                <h3 className={`${neueFont.className}`}>TShirts</h3>
                             
                             </div>
                         </div>
                         <div className="product__item" onClick={() => moveToCategory(19)}>
                             <div className="product__item-img">
                       
-                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro2.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/09/category-2.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
-                                <h3>Jeans</h3>
+                                <h3 className={`${neueFont.className}`}>Jeans</h3>
                             
                             </div>
                         </div>
                         <div className="product__item" onClick={() => moveToCategory(43)}>
                             <div className="product__item-img">
                                 <div className="product__circle"></div>
-                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro3.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/09/category-3.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
-                                <h3>Shirts</h3>
+                                <h3 className={`${neueFont.className}`}>Shirts</h3>
                             
                             </div>
                         </div>
                         <div className="product__item" onClick={() => moveToCategory(42)}>
                             <div className="product__item-img">
                    
-                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/04/pro4.png" alt="" className="product-img"/>
+                                <img src="https://endpoint.originalsbycmt.com/wp-content/uploads/2025/09/category-4.png" alt="" className="product-img"/>
                             </div>
                             <div className="category__item-data">
-                                <h3>Inners</h3>
+                                <h3 className={`${neueFont.className}`}>Inners</h3>
                             
                             </div>
                         </div>
                     </div>
             </div>
         </section>
+        
         <section className="section contact__section">
             <div className="mt-16">
                 <h1 className={`${neueFont.className}`}>Infinite Realms <br/>
